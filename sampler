@@ -1,0 +1,52 @@
+#!/bin/bash
+# make 486 lines
+for i in {1..486} ; do
+    # first 256 samples (of 720)
+    for (( i = 0; i <= 0xff; i++ )) do
+        printf "80%02x" $i
+        if [ $(( $i % 16 )) -eq 0 ] ; then
+            echo -n "80FF80EB"
+        elif [ $(( $i % 4 )) -eq 0 ] ; then
+            echo -n "8080"
+        fi
+    done
+    # middle 208 stripe (of 720)
+    for i in {1..48} ; do
+        echo -n "8080"
+    done
+    # last 256 samples (of 720)
+    for (( i = 0; i <= 0xff; i++ )) do
+        printf "80%02x" $i
+        if [ $(( $i % 16 )) -eq 0 ] ; then
+            echo -n "80008010"
+        elif [ $(( $i % 4 )) -eq 0 ] ; then
+            echo -n "8080"
+        fi
+    done
+done | xxd -r -p | ffmpeg -y -f rawvideo -pix_fmt uyvy422 -r ntsc -s 720x486 -i - -c:v copy 256shades_ntsc.mov
+
+# make 576 lines
+for i in {1..576} ; do
+    # first 256 samples (of 720)
+    for (( i = 0; i <= 0xff; i++ )) do
+        printf "80%02x" $i
+        if [ $(( $i % 16 )) -eq 0 ] ; then
+            echo -n "80FF80EB"
+        elif [ $(( $i % 4 )) -eq 0 ] ; then
+            echo -n "8080"
+        fi
+    done
+    # middle 208 stripe (of 720)
+    for i in {1..48} ; do
+        echo -n "8080"
+    done
+    # last 256 samples (of 720)
+    for (( i = 0; i <= 0xff; i++ )) do
+        printf "80%02x" $i
+        if [ $(( $i % 16 )) -eq 0 ] ; then
+            echo -n "80008010"
+        elif [ $(( $i % 4 )) -eq 0 ] ; then
+            echo -n "8080"
+        fi
+    done
+done | xxd -r -p | ffmpeg -y -f rawvideo -pix_fmt uyvy422 -r pal -s 720x576 -i - -c:v copy 256shades_pal.mov
