@@ -1,0 +1,54 @@
+#!/bin/bash
+# make a video sample collection with inconsistencies
+# requires ffmpeg and sfk
+
+# set default duration
+D=1
+OVERWRITE="-n"
+
+## In all cases the samples are numbered to group together the significant characteristic that they focus on. Following the number each sample is lettered. The letter 'a' of each set is intended to be a valid and consistent expression of that characteristic.
+
+## Interlacement Conflicts
+## Note: these samples do not demonstrate conflicts between the appearance of interlacement and the metadata of interlacement, but show conflicts between container and encoding or lack of clarity.
+
+# 1a. generate a ProRes QuickTime file with TFF interlacement
+ffmpeg -f lavfi -i mandelbrot=s=720x288:r=50 -t "${D}" -c:v prores_ks -vf tinterlace=merge,setsar=sar/2 -flags +ildct+ilme "${OVERWRITE}" 1a_int_tff.mov
+
+# 1b. same as 1a but encoding is progressive while container is tff
+ffmpeg -f lavfi -i mandelbrot=s=720x288:r=50 -t "${D}" -c:v prores_ks -vf tinterlace=merge,setsar=sar/2 "${OVERWRITE}" 1b_int_tff-container_unk-encoding.mov
+
+# 1c. same as 1a but field order is wrongly set to BFF
+ffmpeg -f lavfi -i mandelbrot=s=720x288:r=50 -t "${D}" -c:v prores_ks -vf tinterlace=merge,setsar=sar/2,setfield=bff -flags +ildct+ilme "${OVERWRITE}" 1c_temp.mov
+ffmpeg -i 1c_temp.mov -c:v copy -field_order tt "${OVERWRITE}" 1c_int_bff-encoding_tff-container.mov
+
+# 1d. unknown / unstated interlacement
+# ffmpeg seems to always write a fiel atom for QuickTime, so I'm using sfk to void it out
+ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -c:v prores_ks "${OVERWRITE}" 1d_unclear_interlacement.mov
+sfk replace 1d_int_unclear.mov "/fiel/free/" -yes
+
+## Aspect Ratio
+# 2a. generate a DV QuickTime file with 4/3 interlacement
+ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -vf setdar=4/3,fieldorder=bff -field_order bb -aspect 4/3 -c:v dvvideo "${OVERWRITE}" 2a_dar.mov
+
+# 2b. conflicts between encoding and container
+ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -vf setdar=4/3 -aspect 4/3 -c:v dvvideo "${OVERWRITE}" 2b_temp.mov
+ffmpeg -i 2b_temp.mov -c:v copy -aspect 16/9 "${OVERWRITE}" 2b_dar_encoding-container-mismatch.mov
+
+# 2c. unclear aspect ratio
+# ffmpeg seems to always write a pasp atom for QuickTime, so I'm using sfk to void it out
+ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -c:v v210 "${OVERWRITE}" 2c_unclear_aspect_ratio.mov
+sfk replace 2c_unclear_aspect_ratio.mov "/pasp/free/" -yes
+
+# 3a. frame size
+ffmpeg -f lavfi -i mandelbrot=s=128x96:r=25 -t "${D}" -c:v v210 "${OVERWRITE}" 3a_small_frame_size.mov
+
+# 3b. file with presentation size adjustment in matrix structure
+# hacking the presentation matrix with sfk, hope it works
+ffmpeg -f lavfi -i mandelbrot=s=128x96:r=25 -t "${D}" -c:v v210 "${OVERWRITE}" 3b_size_matrix_scaling.mov
+sfk replace 3b_size_matrix_scaling.mov -bin '/0001000000000000000000000000000000010000000000000000000000000000400000000080000000600000/0003000000000000000000000000000000070000000000000000000000000000400000000080000000600000/' -yes
+
+# 4a. colorspace
+ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -colorspace bt709 -color_trc bt709 -color_primaries bt709 -c:v prores_ks -movflags write_colr "${OVERWRITE}" 4a_color-encoding-and-container.mov
+
+# 4a. colorspace
+ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -colorspace bt709 -color_trc bt709 -color_primaries bt709 -c:v prores_ks -movflags write_colr "${OVERWRITE}" 4b_color-conflict-encoding-and-container.mov
