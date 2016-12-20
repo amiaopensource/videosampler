@@ -53,3 +53,12 @@ ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -colorspace bt709 -color_
 # 4b. colorspace conflicts
 ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -colorspace bt709 -color_trc bt709 -color_primaries bt709 -c:v prores_ks -movflags write_colr "${OVERWRITE}" 4b_temp.mov
 ffmpeg -i 4b_temp.mov -colorspace bt470bg -color_trc bt709 -color_primaries bt470bg -movflags write_colr -c copy "${OVERWRITE}"  4b_color-conflict-encoding-and-container.mov
+
+# 5a. duration
+ffmpeg -f lavfi -i mandelbrot=s=128x96:r=25 -t "${D}" -c:v v210 "${OVERWRITE}" 5a_duration.mov
+
+# 5b. duration adjustment via edit list
+ffmpeg -f lavfi -i mandelbrot=s=128x96:r=25 -t 1 -c:v v210 "${OVERWRITE}" 5b_duration_change.mov
+sfk replace 5b_duration_change.mov -bin  '/746B68640000000300000000000000000000000100000000000003E8/746B6864000000030000000000000000000000010000000000000384/' -yes
+#sfk replace 5b_duration_change.mov -bin '/6D766864000000000000000000000000000003E8000003E8/6D766864000000000000000000000000000003E8000001F4/' -yes
+#sfk replace 5b_duration_change.mov -bin  '/656C73740000000000000001000003E800000000/656C737400000000000000010000032000000A00/' -yes
