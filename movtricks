@@ -24,7 +24,7 @@ ffmpeg -i 1c_temp.mov -c:v copy -field_order tt "${OVERWRITE}" 1c_int_bff-encodi
 # 1d. unknown / unstated interlacement
 # ffmpeg seems to always write a fiel atom for QuickTime, so I'm using sfk to void it out
 ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -c:v prores_ks "${OVERWRITE}" 1d_unclear_interlacement.mov
-sfk replace 1d_int_unclear.mov "/fiel/free/" -yes
+sfk replace 1d_unclear_interlacement.mov "/fiel/free/" -yes
 
 ## Aspect Ratio
 # 2a. generate a DV QuickTime file with 4/3 interlacement
