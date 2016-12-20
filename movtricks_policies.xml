@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<policy type="and" name="Is the file consistent and clear?">
+  <description>Tests to find inconsistencies or lack of clarity in audiovisual characteristics.</description>
+  <rule name="Is ScanType consistent?" value="ScanType_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <rule name="Is ScanOrder consistent?" value="ScanOrder_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <rule name="Is Duration consistent?" value="Source_Duration" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <rule name="Is FrameCount consistent?" value="Source_FrameCount" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <rule name="Is StreamSize consistent?" value="Source_StreamSize" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <rule name="Is StreamSize Encoded consistent?" value="Source_StreamSize_Encoded" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <policy type="and" name="Is the FrameRate info consistent?">
+    <rule name="Is FrameRate consistent?" value="FrameRate_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+    <rule name="Is FrameRate Numerator consistent?" value="FrameRate_Original_Num" tracktype="Video" occurrence="1" operator="must not exist"/>
+    <rule name="Is FrameRate Denominator consistent?" value="FrameRate_Original_Den" tracktype="Video" occurrence="1" operator="must not exist"/>
+    <rule name="Is FrameRate_Mode consistent?" value="FrameRate_Mode_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+  </policy>
+  <rule name="Is Width consistent?" value="Width_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <rule name="Is Height consistent?" value="Height_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <rule name="Is SampleCount consistent?" value="Source_SamplingCount" tracktype="Audio" occurrence="1" operator="must not exist"/>
+  <rule name="Is SampleAspectRatio consistent?" value="SampleAspectRatio_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <rule name="Is DisplayAspectRatio consistent?" value="DisplayAspectRatio_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <policy type="or" name="Is the Color Description consistent?">
+    <rule name="Is colour_primaries_Original present?" value="colour_primaries_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+    <rule name="Is transfer_characteristics_Original present?" value="transfer_characteristics_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+    <rule name="Is matrix_coefficients_Original present?" value="matrix_coefficients_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+  </policy>
+  <rule name="Is the Color Description consistent?" value="DisplayAspectRatio_Original" tracktype="Video" occurrence="1" operator="must not exist"/>
+  <policy type="or" name="If QuickTime, then are interlacement and aspect ratio clear.">
+    <rule name="Not QuickTime?" value="Format_Profile" tracktype="General" occurrence="1" operator="!=">QuickTime</rule>
+    <policy type="and" name="QuickTime with default matrix and fiel and pasp atoms?">
+      <rule name="Is QuickTime?" value="Format_Profile" tracktype="General" occurrence="1" operator="=">QuickTime</rule>
+      <rule name="fiel atom is used?" scope="mmt" value="File header/Track/Media/Media Information/Sample Table/Sample Description/Video/Field handling/Header/Name" operator="exists"/>
+      <rule name="pasp atom is used?" scope="mmt" value="File header/Track/Media/Media Information/Sample Table/Sample Description/Video/Pixel Aspect Ratio/Header/Name" operator="exists"/>
+      <policy type="and" name="Movie Header Matrix structure uses defaults">
+        <rule name="width scale is 1?" scope="mmt" value="File header/Movie header/Matrix structure/a (width scale)" operator="=">1.000</rule>
+        <rule name="width rotate is 0?" scope="mmt" value="File header/Movie header/Matrix structure/b (width rotate)" operator="=">0.000</rule>
+        <rule name="width angle is 0?" scope="mmt" value="File header/Movie header/Matrix structure/u (width angle)" operator="=">0.000</rule>
+        <rule name="height rotate is 1?" scope="mmt" value="File header/Movie header/Matrix structure/c (height rotate)" operator="=">0.000</rule>
+        <rule name="height scale is 0?" scope="mmt" value="File header/Movie header/Matrix structure/d (height scale)" operator="=">1.000</rule>
+        <rule name="height angle is 0?" scope="mmt" value="File header/Movie header/Matrix structure/v (height angle)" operator="=">0.000</rule>
+        <rule name="position left is 0?" scope="mmt" value="File header/Movie header/Matrix structure/x (position left)" operator="=">0.000</rule>
+        <rule name="position top is 0?" scope="mmt" value="File header/Movie header/Matrix structure/y (position top)" operator="=">0.000</rule>
+        <rule name="divider is 1?" scope="mmt" value="File header/Movie header/Matrix structure/w (divider)" operator="=">1.000</rule>
+      </policy>
+      <policy type="and" name="Track Header Matrix structure uses defaults">
+        <rule name="width scale is 1?" scope="mmt" value="File header/Track/Track Header/Matrix structure/a (width scale)" operator="=">1.000</rule>
+        <rule name="width rotate is 0?" scope="mmt" value="File header/Track/Track Header/Matrix structure/b (width rotate)" operator="=">0.000</rule>
+        <rule name="width angle is 0?" scope="mmt" value="File header/Track/Track Header/Matrix structure/u (width angle)" operator="=">0.000</rule>
+        <rule name="height rotate is 1?" scope="mmt" value="File header/Track/Track Header/Matrix structure/c (height rotate)" operator="=">0.000</rule>
+        <rule name="height scale is 0?" scope="mmt" value="File header/Track/Track Header/Matrix structure/d (height scale)" operator="=">1.000</rule>
+        <rule name="height angle is 0?" scope="mmt" value="File header/Track/Track Header/Matrix structure/v (height angle)" operator="=">0.000</rule>
+        <rule name="position left is 0?" scope="mmt" value="File header/Track/Track Header/Matrix structure/x (position left)" operator="=">0.000</rule>
+        <rule name="position top is 0?" scope="mmt" value="File header/Track/Track Header/Matrix structure/y (position top)" operator="=">0.000</rule>
+        <rule name="divider is 1?" scope="mmt" value="File header/Track/Track Header/Matrix structure/w (divider)" operator="=">1.000</rule>
+      </policy>
+    </policy>
+  </policy>
+</policy>
