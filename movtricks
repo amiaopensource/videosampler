@@ -50,5 +50,6 @@ sfk replace 3b_size_matrix_scaling.mov -bin '/0001000000000000000000000000000000
 # 4a. colorspace
 ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -colorspace bt709 -color_trc bt709 -color_primaries bt709 -c:v prores_ks -movflags write_colr "${OVERWRITE}" 4a_color-encoding-and-container.mov
 
-# 4a. colorspace
-ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -colorspace bt709 -color_trc bt709 -color_primaries bt709 -c:v prores_ks -movflags write_colr "${OVERWRITE}" 4b_color-conflict-encoding-and-container.mov
+# 4b. colorspace conflicts
+ffmpeg -f lavfi -i mandelbrot=s=720x576:r=25 -t "${D}" -colorspace bt709 -color_trc bt709 -color_primaries bt709 -c:v prores_ks -movflags write_colr "${OVERWRITE}" 4b_temp.mov
+ffmpeg -i 4b_temp.mov -colorspace bt470bg -color_trc bt709 -color_primaries bt470bg -movflags write_colr -c copy "${OVERWRITE}"  4b_color-conflict-encoding-and-container.mov
