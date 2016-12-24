@@ -112,8 +112,9 @@
      </xsl:choose>
  </xsl:template>
  <xsl:template match="mc:rule">
+   <xsl:text>&#xa;</xsl:text>
    <xsl:if test="@outcome!='pass'">
-       <xsl:text>&#xa;  --  </xsl:text>
+       <xsl:text>  --  </xsl:text>
        <xsl:text>[</xsl:text>
        <xsl:value-of select="@outcome"/>
        <xsl:text>:</xsl:text>
