@@ -108,7 +108,8 @@
     <xsl:if test="@outcome!='pass'">
       <xsl:text>&#xa;</xsl:text>
       <xsl:text> </xsl:text>
-      <xsl:text>  --  </xsl:text>
+      <xsl:text>  --</xsl:text>
+      <xsl:value-of select="substring('                            ',1,count(ancestor::*))"/>
       <xsl:text>[</xsl:text>
       <xsl:value-of select="@outcome"/>
       <xsl:text>:</xsl:text>
