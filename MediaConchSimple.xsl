@@ -12,7 +12,7 @@
         </xsl:when>
         <xsl:when test="boolean(mc:implementationChecks/@fail_count)">
           <xsl:choose>
-            <xsl:when test="sum(mc:implementationChecks/@pass_count) = '0' and sum(mc:implementationChecks/@fail_count) = '0'">untested</xsl:when>
+            <xsl:when test="sum(mc:implementationChecks/@pass_count) = '0' and sum(mc:implementationChecks/@fail_count) = '0'">N/A</xsl:when>
             <xsl:when test="sum(mc:implementationChecks/@fail_count) = '0'">pass</xsl:when>
             <xsl:when test="sum(mc:implementationChecks/@fail_count) > '0'">fail</xsl:when>
           </xsl:choose>
