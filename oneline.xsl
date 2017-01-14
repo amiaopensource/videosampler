@@ -4,9 +4,9 @@
  <xsl:template match="/mc:MediaConch">
    <xsl:for-each select="mc:media">
      <xsl:value-of select="mc:rule/@outcome|mc:policy/@outcome"/>
-     <xsl:text>,</xsl:text>
+     <xsl:text>! </xsl:text>
      <xsl:value-of select="@ref"/>
-     <xsl:text>,</xsl:text>
+     <xsl:text> |</xsl:text>
      <xsl:apply-templates select="mc:implementationChecks"/>
      <xsl:apply-templates select="mc:rule|mc:policy"/>
    </xsl:for-each>
@@ -76,7 +76,7 @@
            <xsl:text>        Format ID: </xsl:text>
            <xsl:value-of select="@formatid"/>
            <xsl:text>&#xa;</xsl:text>
-         </xsl:if>     
+         </xsl:if>
        </xsl:for-each>
        <xsl:if test="@reason != ''">
          <xsl:text>        Reason: </xsl:text>
@@ -99,21 +99,22 @@
  <xsl:template match="mc:policy">
      <xsl:choose>
          <xsl:when test="@outcome!='pass'">
-             <xsl:text>"(</xsl:text>
-             <xsl:value-of select="@name"/>
-             <xsl:text>:</xsl:text>
-             <xsl:apply-templates select="mc:rule[@outcome!='pass']|mc:policy[@outcome!='pass']"/>
-             <xsl:text>)"</xsl:text>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="mc:rule[@outcome!='pass']|mc:policy[@outcome!='pass']"/>
          </xsl:when>
          <xsl:otherwise>
-             <xsl:text>"</xsl:text>
-             <xsl:value-of select="@name"/>
-             <xsl:text>"</xsl:text>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text> </xsl:text>
          </xsl:otherwise>
      </xsl:choose>
  </xsl:template>
  <xsl:template match="mc:rule">
+   <xsl:text>&#xa;</xsl:text>
    <xsl:if test="@outcome!='pass'">
+       <xsl:text>  --  </xsl:text>
        <xsl:text>[</xsl:text>
        <xsl:value-of select="@outcome"/>
        <xsl:text>:</xsl:text>
