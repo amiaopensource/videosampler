@@ -12,11 +12,31 @@
         <xsl:text>first passing policy or rule</xsl:text>
         <xsl:text>&#xa;</xsl:text>
         <xsl:for-each select="mc:media">
-          <xsl:value-of select="@ref"/>
+          <xsl:call-template name="escapecommas">
+            <xsl:with-param name="text" select="@ref"/>
+          </xsl:call-template>
           <xsl:text>,</xsl:text>
           <xsl:value-of select="mc:policy/mc:policy[@outcome='pass'][1]/@name|mc:policy/mc:rule[@outcome='pass'][1]/@name|mc:policy/mc:rule[@outcome='pass'][1]/@name"/>
           <xsl:text>&#xa;</xsl:text>
         </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template name="escapecommas">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="$text = ''" >
+        <xsl:value-of select="$text"/>
+      </xsl:when>
+      <xsl:when test="contains($text, ',')">
+        <xsl:value-of select="substring-before($text,',')"/>
+        <xsl:text>\,</xsl:text>
+        <xsl:call-template name="escapecommas">
+          <xsl:with-param name="text" select="substring-after($text,',')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
