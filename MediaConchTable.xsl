@@ -32,45 +32,5 @@
       </xsl:for-each>
     </xsl:for-each>
   </xsl:template>
-  <xsl:template match="mc:implementationChecks">
-    <xsl:for-each select="mc:check[@fail_count > '0']">
-      <xsl:text>&#xa;</xsl:text>
-      <xsl:text> -- </xsl:text>
-      <xsl:value-of select="@icid"/>
-      <xsl:for-each select="mc:test[@outcome='fail']">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text> --</xsl:text>
-        <xsl:value-of select="substring('                            ',1,count(ancestor::*))"/>
-        <xsl:text>[</xsl:text>
-        <xsl:value-of select="@outcome"/>
-        <xsl:text>:</xsl:text>
-        <xsl:value-of select="@reason"/>
-        <xsl:text>]</xsl:text>
-        <xsl:for-each select="mc:value">
-          <xsl:text>&#xa;</xsl:text>
-          <xsl:text> --</xsl:text>
-          <xsl:value-of select="substring('                            ',1,count(ancestor::*))"/>
-          <xsl:text>[</xsl:text>
-          <xsl:value-of select="@context"/>
-          <xsl:text> at bytes offset of </xsl:text>
-          <xsl:value-of select="@offset"/>
-          <xsl:text>]</xsl:text>
-        </xsl:for-each>
-      </xsl:for-each>
-    </xsl:for-each>
-  </xsl:template>
-  <xsl:template match="mc:policy|mc:rule">
-    <xsl:if test="@outcome!='pass'">
-      <xsl:text>&#xa;</xsl:text>
-      <xsl:text> </xsl:text>
-      <xsl:text>  --</xsl:text>
-      <xsl:value-of select="substring('                            ',1,count(ancestor::*))"/>
-      <xsl:text>[</xsl:text>
-      <xsl:value-of select="@outcome"/>
-      <xsl:text>:</xsl:text>
-      <xsl:value-of select="@name"/>
-      <xsl:text>]</xsl:text>
-      <xsl:apply-templates select="mc:rule[@outcome!='pass']|mc:policy[@outcome!='pass']"/>
-    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
