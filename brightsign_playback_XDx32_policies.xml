@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<policy type="and" name="XDx32">
+  <policy type="or" name="H.264, MPEG-2, or MPEG-1?">
+    <policy type="and" name="Is supported h264?">
+      <rule name="AVC?" value="Format" tracktype="Video" occurrence="*" operator="=">AVC</rule>
+      <rule name="h264 up to level 4.2?" value="Format_Level" tracktype="Video" occurrence="*" operator="&lt;=">4.2</rule>
+      <policy type="and" name="h264 main or high profile">
+        <rule name="Is main profile?" value="Format_Profile" tracktype="Video" occurrence="*" operator="=">Main</rule>
+        <rule name="Is high profile?" value="Format_Profile" tracktype="Video" occurrence="*" operator="=">High</rule>
+      </policy>
+    </policy>
+    <policy type="and" name="Is MPEG-2">
+      <rule name="Is MPEG Video?" value="Format" tracktype="Video" occurrence="*" operator="=">MPEG Video</rule>
+      <rule name="Is version 2?" value="Format_Version" tracktype="Video" occurrence="*" operator="=">2</rule>
+    </policy>
+    <policy type="and" name="Is MPEG-1">
+      <rule name="Is MPEG Video?" value="Format" tracktype="Video" occurrence="*" operator="=">MPEG Video</rule>
+      <rule name="Is version 1?" value="Format_Version" tracktype="Video" occurrence="*" operator="=">1</rule>
+    </policy>
+  </policy>
+  <policy type="or" name="Extension is ts mpg vob mov mp4 m2ts or wmv?">
+    <rule name="Extension is .ts?" value="FileExtension" tracktype="General" operator="=">ts</rule>
+    <rule name="Extension is .mpg?" value="FileExtension" tracktype="General" operator="=">mpg</rule>
+    <rule name="Extension is .vob?" value="FileExtension" tracktype="General" operator="=">vob</rule>
+    <rule name="Extension is .mov?" value="FileExtension" tracktype="General" operator="=">mov</rule>
+    <rule name="Extension is .mp4?" value="FileExtension" tracktype="General" operator="=">mp4</rule>
+    <rule name="Extension is .m2ts?" value="FileExtension" tracktype="General" operator="=">m2ts</rule>
+    <policy type="and" name="Extension is wmv and video-only?">
+      <rule name="Extension is .wmv?" value="FileExtension" tracktype="General" operator="=">wmv</rule>
+      <rule name="Is video only?" value="ID" tracktype="Audio" occurrence="1" operator="must not exist">wmv</rule>
+    </policy>
+  </policy>
+  <rule name="Is width is not more than 1920?" value="Width" tracktype="Video" occurrence="*" operator="&lt;=">1920</rule>
+  <rule name="Is height is not more than 1080?" value="Height" tracktype="Video" occurrence="*" operator="&lt;=">1080</rule>
+  <rule name="No compressed header?" scope="mmt" value="File header/Compressed file header/Header/Name" operator="must not exist"/>
+  <policy type="and" name="Maximum Recommended Video Bit Rate">
+    <rule name="Bitrate no more than 25Mbps?" value="BitRate" tracktype="Video" occurrence="*" operator="&lt;=">25000000</rule>
+  </policy>
+  <policy type="or" name="Audio is AAC?">
+    <rule name="No Audio?" value="Format" tracktype="Audio" occurrence="1" operator="must not exist"/>
+    <policy type="and" name="Is supported AAC?">
+      <rule name="Audio is AAC?" value="Format" tracktype="Audio" occurrence="1" operator="=">AAC</rule>
+      <rule name="Bitrate no more than 288Kbps?" value="BitRate" tracktype="Audio" occurrence="1" operator="&lt;=">288000</rule>
+    </policy>
+  </policy>
+</policy>
