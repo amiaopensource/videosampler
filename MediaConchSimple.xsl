@@ -61,6 +61,10 @@
       <xsl:value-of select="@outcome"/>
       <xsl:text>:</xsl:text>
       <xsl:value-of select="@name"/>
+      <xsl:if test="string-length(@actual)>0">
+        <xsl:text>, </xsl:text>
+        <xsl:value-of select="@actual"/>
+      </xsl:if>
       <xsl:text>]</xsl:text>
       <xsl:apply-templates select="mc:rule[@outcome!='pass']|mc:policy[@outcome!='pass']"/>
     </xsl:if>
